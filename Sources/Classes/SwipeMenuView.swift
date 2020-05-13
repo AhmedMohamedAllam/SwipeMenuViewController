@@ -1,6 +1,7 @@
 import UIKit
 
 // MARK: - SwipeMenuViewOptions
+
 public struct SwipeMenuViewOptions {
 
     public struct TabView {
@@ -26,6 +27,9 @@ public struct SwipeMenuViewOptions {
 
             /// ItemView font. Defaults to `14 pt as bold SystemFont`.
             public var font: UIFont = UIFont.boldSystemFont(ofSize: 14)
+            
+            /// ItemView selectedFont. Defaults to `15 pt as bold SystemFont`.
+            public var selectedFont: UIFont = UIFont.systemFont(ofSize: 15, weight: .heavy)
 
             /// ItemView clipsToBounds. Defaults to `true`.
             public var clipsToBounds: Bool = true
@@ -48,10 +52,6 @@ public struct SwipeMenuViewOptions {
                 /// Circle cornerRadius if addition style select `.circle`. Defaults to `nil`.
                 /// `AdditionView.height / 2` in the case of nil.
                 public var cornerRadius: CGFloat? = nil
-                
-                /// Circle maskedCorners if addition style select `.circle`. Defaults to `nil`.
-                /// It helps to make specific corners rounded.
-                public var maskedCorners: CACornerMask? = nil
             }
 
             /// AdditionView side margin. Defaults to `0.0`.
@@ -66,9 +66,6 @@ public struct SwipeMenuViewOptions {
             
             /// AdditionView animating duration. Defaults to `0.3`.
             public var animationDuration: Double = 0.3
-            
-            /// AdditionView swipe animation disable feature. Defaults to 'true'
-            public var isAnimationOnSwipeEnable: Bool = true
 
             /// Underline style options.
             public var underline = Underline()
@@ -239,6 +236,12 @@ open class SwipeMenuView: UIView {
         super.init(frame: frame)
     }
 
+    public override init(frame: CGRect) {
+        self.options = .init()
+        
+        super.init(frame: frame)
+    }
+    
     public required init?(coder aDecoder: NSCoder) {
 
         self.options = .init()
@@ -250,9 +253,7 @@ open class SwipeMenuView: UIView {
 
         isLayoutingSubviews = true
         super.layoutSubviews()
-        if !isJumping {
-            reloadData(isOrientationChange: true)
-        }
+        reloadData(isOrientationChange: true)
     }
 
     open override func didMoveToSuperview() {
